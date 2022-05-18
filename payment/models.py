@@ -84,7 +84,13 @@ class Card(models.Model):
 
     def show_payment_mean(self):
         def hide(number):
-            return 123
+            newnumber=''
+            for i in range(16):
+                if i> 3 and i<12:
+                    newnumber+= '*'
+                else:
+                    newnumber+=number[i]
+            return newnumber
 
         return self.cartholder_name+' '+self.cartholder_surname+' '+str(hide(self.cart_number))
 
