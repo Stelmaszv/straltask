@@ -1,4 +1,6 @@
-from django.core.validators import MinValueValidator, MaxValueValidator
+import requests
+import json
+from django.core.validators import MinValueValidator
 from django.db import models
 
 currency_choices =(
@@ -14,8 +16,14 @@ payment_type =(
     ("dp", "dp"),
 )
 
-def get_corent_var(var):
-    return var
+def get_corent_var(amount,currency):
+    response = requests.get("https://api.nbp.pl/api/exchangerates/tables/a/?format=json")
+    text = json.dumps(response.json(), sort_keys=True, indent=4)
+    json_array = json.loads(text)[0]['rates']
+
+    for el in json_array:
+        if el['code'] == currency:
+            return amount*el['mid']
 
 class PayByLink(models.Model):
     create_at = models.DateTimeField(auto_now=True)
@@ -37,7 +45,7 @@ class PayByLink(models.Model):
             description=self.description,
             currency=self.currency,
             amount=self.amount,
-            amount_in_pl=get_corent_var(self.amount)
+            amount_in_pl=get_corent_var(self.amount,self.currency)
         ).save()
 
     def __str__(self):
@@ -63,7 +71,7 @@ class DirectPayment(models.Model):
             description=self.description,
             currency=self.currency,
             amount=self.amount,
-            amount_in_pl=get_corent_var(self.amount)
+            amount_in_pl=get_corent_var(self.amount,self.currency)
         ).save()
 
     def __str__(self):
@@ -113,7 +121,7 @@ class Card(models.Model):
             description=self.description,
             currency=self.currency,
             amount=self.amount,
-            amount_in_pl=get_corent_var(self.amount)
+            amount_in_pl=get_corent_var(self.amount,self.currency)
         ).save()
 
     def __str__(self):
