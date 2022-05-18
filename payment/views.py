@@ -1,3 +1,10 @@
-from django.shortcuts import render
+from rest_framework import generics
+from payment.models import PaymentInfo
+from payment.seralisers import PeymentInfoSeralizer
 
-# Create your views here.
+
+class PaymentInfoView(generics.ListAPIView):
+
+    Model = PaymentInfo
+    queryset = PaymentInfo.objects.all()
+    serializer_class = PeymentInfoSeralizer

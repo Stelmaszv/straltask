@@ -2,16 +2,16 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 currency_choices =(
-    ("1", "EUR"),
-    ("2", "USD"),
-    ("3", "GBR"),
-    ("4", "PL"),
+    ("EUR","EUR"),
+    ("USD","USD"),
+    ("GBR","GBR"),
+    ("PL","PL"),
 )
 
 payment_type =(
-    ("1", "pay_by_link"),
-    ("2", "card"),
-    ("3", "dp"),
+    ("pay_by_link", "pay_by_link"),
+    ("card", "card"),
+    ("dp", "dp"),
 )
 
 class PayByLink(models.Model):
@@ -61,3 +61,6 @@ class PaymentInfo(models.Model):
     amount = models.IntegerField(validators=[MinValueValidator(10)])
     currency = models.CharField(max_length=3)
     amount_in_pl = models.IntegerField(validators=[MinValueValidator(10)])
+
+    def __str__(self):
+        return self.type+' - '+self.payment_mean
