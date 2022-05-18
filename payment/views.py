@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from payment.models import PaymentInfo
-from payment.seralisers import PeymentInfoSeralizer
+from payment.seralisers import PeymentInfoSeralizer, PeymentInfoTypeSeralizer
+
 
 class APIPrototype(APIView):
     reverse         = True
@@ -34,10 +35,14 @@ class APIPrototype(APIView):
     def get(self, request, *args, **kwargs):
         return self.api_get(request)
 
-
 class PaymentInfoView(APIPrototype):
 
     SerializerClass = PeymentInfoSeralizer
     queryset = PaymentInfo.objects
     reverse = True
     order_by = 'date'
+
+class PaymentInfoByTypeView(APIPrototype):
+
+    SerializerClass = PeymentInfoTypeSeralizer
+    queryset = PaymentInfo.objects
