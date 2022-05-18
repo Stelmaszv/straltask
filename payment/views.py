@@ -1,9 +1,8 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-from payment.models import PaymentInfo
-from payment.seralisers import PeymentInfoSeralizer, PeymentInfoTypeSeralizer
+from payment.models import PaymentInfo,PayByLink
+from payment.seralisers import PeymentInfoSeralizer, PeymentInfoTypeSeralizer,PayByLink as PayByLinkSeralizer
 
 
 class APIPrototype(APIView):
@@ -12,7 +11,6 @@ class APIPrototype(APIView):
     many     = True
     queryset = ''
     order_by = ''
-    http_method_names = ['get']
 
     def on_query_set(self):
         pass
@@ -29,6 +27,13 @@ class APIPrototype(APIView):
             list= serializer.data
         return list
 
+    def post(self, request, *args, **kwargs):
+        serializer = self.SerializerClass(data=request.data, many=False)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(data=self.list(), status=status.HTTP_201_CREATED)
+        return self.api_get(request)
+
     def api_get(self, request, *args, **kwargs):
         return Response(data=self.list(), status=status.HTTP_200_OK)
 
@@ -37,6 +42,7 @@ class APIPrototype(APIView):
 
 class PaymentInfoView(APIPrototype):
 
+    http_method_names = ['get']
     SerializerClass = PeymentInfoSeralizer
     queryset = PaymentInfo.objects
     reverse = True
@@ -46,3 +52,10 @@ class PaymentInfoByTypeView(APIPrototype):
 
     SerializerClass = PeymentInfoTypeSeralizer
     queryset = PaymentInfo.objects
+
+class PayByLinkView(generics.CreateAPIView):
+
+    serializer_class = PayByLinkSeralizer
+    queryset = PayByLink.objects
+    http_method_names = ['post']
+
