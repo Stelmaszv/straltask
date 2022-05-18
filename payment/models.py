@@ -20,7 +20,6 @@ class PayByLink(models.Model):
         max_length=3,
         choices=currency_choices,
         default="1",
-
     )
     amount = models.IntegerField(validators=[MinValueValidator(10)])
     description = models.CharField(max_length=20)

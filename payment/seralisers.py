@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from payment.models import PaymentInfo,PayByLink as PayByLinkModel
-
+from payment.models import PaymentInfo,PayByLink as PayByLinkModel,DirectPayment as DirectPaymentModel
 
 class PeymentInfoSeralizer(serializers.ModelSerializer):
     class Meta:
@@ -11,6 +10,11 @@ class PayByLink(serializers.ModelSerializer):
     class Meta:
         model = PayByLinkModel
         fields = ['create_at','currency','amount','description','bank']
+
+class DirectPayment(serializers.ModelSerializer):
+    class Meta:
+        model = DirectPaymentModel
+        fields = ['create_at','currency','amount','description','iban']
 
 class PeymentInfoTypeSeralizer(serializers.Serializer):
 

@@ -1,8 +1,9 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from payment.models import PaymentInfo,PayByLink
-from payment.seralisers import PeymentInfoSeralizer, PeymentInfoTypeSeralizer,PayByLink as PayByLinkSeralizer
+from payment.models import PaymentInfo,PayByLink,DirectPayment
+from payment.seralisers import PeymentInfoSeralizer, PeymentInfoTypeSeralizer,PayByLink as PayByLinkSeralizer,\
+    DirectPayment as DirectPaymentSeralizer
 
 
 class APIPrototype(APIView):
@@ -57,5 +58,11 @@ class PayByLinkView(generics.CreateAPIView):
 
     serializer_class = PayByLinkSeralizer
     queryset = PayByLink.objects
+    http_method_names = ['post']
+
+class DirectPaymentView(generics.CreateAPIView):
+
+    serializer_class = DirectPaymentSeralizer
+    queryset = DirectPayment.objects
     http_method_names = ['post']
 
