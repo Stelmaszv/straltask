@@ -70,4 +70,3 @@ class CardView(generics.CreateAPIView):
     serializer_class = CardSeralizer
     queryset = Card.objects
     http_method_names = ['post']
-

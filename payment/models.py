@@ -2,6 +2,7 @@ import requests
 import json
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.conf.global_settings import AUTH_USER_MODEL
 
 currency_choices =(
     ("EUR","EUR"),
@@ -45,7 +46,7 @@ class PayByLink(models.Model):
             description=self.description,
             currency=self.currency,
             amount=self.amount,
-            amount_in_pl=get_corent_var(self.amount,self.currency)
+            amount_in_pl=get_corent_var(self.amount,self.currency),
         ).save()
 
     def __str__(self):
@@ -71,7 +72,7 @@ class DirectPayment(models.Model):
             description=self.description,
             currency=self.currency,
             amount=self.amount,
-            amount_in_pl=get_corent_var(self.amount,self.currency)
+            amount_in_pl=get_corent_var(self.amount,self.currency),
         ).save()
 
     def __str__(self):
@@ -121,7 +122,7 @@ class Card(models.Model):
             description=self.description,
             currency=self.currency,
             amount=self.amount,
-            amount_in_pl=get_corent_var(self.amount,self.currency)
+            amount_in_pl=get_corent_var(self.amount,self.currency),
         ).save()
 
     def __str__(self):
@@ -139,6 +140,7 @@ class PaymentInfo(models.Model):
     amount = models.IntegerField(validators=[MinValueValidator(10)])
     currency = models.CharField(max_length=3)
     amount_in_pl = models.IntegerField(validators=[MinValueValidator(10)])
+    Customer = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.type+' - '+self.payment_mean
