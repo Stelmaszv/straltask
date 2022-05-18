@@ -14,6 +14,9 @@ payment_type =(
     ("dp", "dp"),
 )
 
+def get_corent_var(var):
+    return var
+
 class PayByLink(models.Model):
     create_at = models.DateTimeField(auto_now=True)
     currency = models.CharField(
@@ -24,6 +27,21 @@ class PayByLink(models.Model):
     amount = models.IntegerField(validators=[MinValueValidator(10)])
     description = models.CharField(max_length=20)
     bank = models.CharField(max_length=5)
+
+    def save(self, *args, **kwargs):
+        super(PayByLink, self).save()
+        PaymentInfo(
+            date=str(self.create_at),
+            type='pay_by_link',
+            payment_mean='bank',
+            description=self.description,
+            currency=self.currency,
+            amount=self.amount,
+            amount_in_pl=get_corent_var(self.amount)
+        ).save()
+
+    def __str__(self):
+        return self.description
 
 class DirectPayment(models.Model):
     create_at = models.DateTimeField(auto_now=True)
@@ -50,7 +68,7 @@ class Card(models.Model):
     cart_number = models.CharField(max_length=16)
 
 class PaymentInfo(models.Model):
-    date = models.DateTimeField()
+    date = models.DateTimeField(null=False)
     type = models.CharField(
         max_length=11,
         choices=payment_type,
