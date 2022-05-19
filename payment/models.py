@@ -44,7 +44,7 @@ class PayByLink(models.Model):
         PaymentInfo(
             date=str(self.create_at),
             type='pay_by_link',
-            payment_mean='bank',
+            payment_mean=self.bank,
             description=self.description,
             currency=self.currency,
             amount=self.amount,
@@ -72,7 +72,7 @@ class DirectPayment(models.Model):
         PaymentInfo(
             date=str(self.create_at),
             type='db',
-            payment_mean='iban',
+            payment_mean=self.iban,
             description=self.description,
             currency=self.currency,
             amount=self.amount,
