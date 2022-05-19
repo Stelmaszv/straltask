@@ -15,8 +15,8 @@ class APIPrototype(APIView):
     def on_query_set(self):
         pass
 
-    def list(self):
-        self.on_query_set()
+    def list(self,request):
+        self.on_query_set(request.user)
         serializer = self.SerializerClass(self.queryset, many=self.many)
         if len(self.order_by):
             list = sorted(
@@ -30,12 +30,13 @@ class APIPrototype(APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.SerializerClass(data=request.data, many=False)
         if serializer.is_valid():
+            request.data['Customer']=request.user
             serializer.save()
             return Response(data=self.list(), status=status.HTTP_201_CREATED)
         return self.api_get(request)
 
     def api_get(self, request, *args, **kwargs):
-        return Response(data=self.list(), status=status.HTTP_200_OK)
+        return Response(data=self.list(request), status=status.HTTP_200_OK)
 
     def get(self, request, *args, **kwargs):
         return self.api_get(request)
@@ -48,25 +49,33 @@ class PaymentInfoView(APIPrototype):
     reverse = True
     order_by = 'date'
 
+class PaymentInfoId(PaymentInfoView):
+
+    http_method_names = ['get']
+    SerializerClass = PeymentInfoSeralizer
+
+    def on_query_set(self,user):
+        self.queryset = PaymentInfo.objects.filter(Customer=user)
+
 class PaymentInfoByTypeView(APIPrototype):
 
+    http_method_names = ['get']
     SerializerClass = PeymentInfoTypeSeralizer
     queryset = PaymentInfo.objects
 
-class PayByLinkView(generics.CreateAPIView):
+class PayByLinkView(APIPrototype):
 
     serializer_class = PayByLinkSeralizer
     queryset = PayByLink.objects
-    http_method_names = ['post']
 
-class DirectPaymentView(generics.CreateAPIView):
+class DirectPaymentView(APIPrototype):
 
     serializer_class = DirectPaymentSeralizer
     queryset = DirectPayment.objects
-    http_method_names = ['post']
 
-class CardView(generics.CreateAPIView):
+class CardView(APIPrototype):
 
-    serializer_class = CardSeralizer
+    SerializerClass = CardSeralizer
     queryset = Card.objects
-    http_method_names = ['post']
+
+

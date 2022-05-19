@@ -36,6 +36,7 @@ class PayByLink(models.Model):
     amount = models.IntegerField(validators=[MinValueValidator(10)])
     description = models.CharField(max_length=20)
     bank = models.CharField(max_length=5)
+    Customer = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         super(PayByLink, self).save()
@@ -47,6 +48,7 @@ class PayByLink(models.Model):
             currency=self.currency,
             amount=self.amount,
             amount_in_pl=get_corent_var(self.amount,self.currency),
+            Customer=self.Customer
         ).save()
 
     def __str__(self):
@@ -62,6 +64,7 @@ class DirectPayment(models.Model):
     amount = models.IntegerField(validators=[MinValueValidator(10)])
     description = models.CharField(max_length=20)
     iban = models.CharField(max_length=30)
+    Customer = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         super(DirectPayment, self).save()
@@ -73,6 +76,7 @@ class DirectPayment(models.Model):
             currency=self.currency,
             amount=self.amount,
             amount_in_pl=get_corent_var(self.amount,self.currency),
+            Customer=self.Customer
         ).save()
 
     def __str__(self):
@@ -90,6 +94,7 @@ class Card(models.Model):
     cartholder_name = models.CharField(max_length=30)
     cartholder_surname = models.CharField(max_length=30)
     cart_number = models.CharField(max_length=16)
+    Customer = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
 
     def show_payment_mean(self):
         def hide(number):
@@ -123,6 +128,7 @@ class Card(models.Model):
             currency=self.currency,
             amount=self.amount,
             amount_in_pl=get_corent_var(self.amount,self.currency),
+            Customer=self.Customer
         ).save()
 
     def __str__(self):

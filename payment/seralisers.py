@@ -17,9 +17,12 @@ class DirectPayment(serializers.ModelSerializer):
         fields = ['create_at','currency','amount','description','iban']
 
 class Card(serializers.ModelSerializer):
+
     class Meta:
         model = CardModel
-        fields = ['create_at', 'currency', 'amount', 'description', 'cartholder_name','cartholder_surname','cart_number']
+        fields = ['create_at', 'currency', 'amount',
+                  'description', 'cartholder_name',
+                  'cartholder_surname','cart_number']
 
 class PeymentInfoTypeSeralizer(serializers.Serializer):
 
