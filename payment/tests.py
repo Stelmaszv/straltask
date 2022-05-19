@@ -1,9 +1,11 @@
-from rest_framework.test import APITestCase
-from django.urls import resolve
-from django.urls import reverse
+from django.urls import resolve, reverse
 from rest_framework import status
-from payment.views import PaymentInfoView, PayByLinkView, DirectPaymentView,CardView
-from payment.models import PayByLink,DirectPayment,Card,PaymentInfo
+from rest_framework.test import APITestCase
+
+from payment.models import Card, DirectPayment, PayByLink, PaymentInfo
+from payment.views import (CardView, DirectPaymentView, PayByLinkView,
+                           PaymentInfoView)
+
 
 class AbstratTest(APITestCase):
     many=True

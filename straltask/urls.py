@@ -16,8 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from payment.views import PaymentInfoView, PaymentInfoByTypeView, PayByLinkView, DirectPaymentView, CardView, \
-    PaymentInfoId, PaymentInfoSaveRaportId
+from payment.views import (CardView, DirectPaymentView, PayByLinkView,
+                           PaymentInfoByTypeView, PaymentInfoId,
+                           PaymentInfoSaveRaportId, PaymentInfoView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

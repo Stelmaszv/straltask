@@ -1,5 +1,10 @@
 from rest_framework import serializers
-from payment.models import PaymentInfo,PayByLink as PayByLinkModel,DirectPayment as DirectPaymentModel,Card as CardModel
+
+from payment.models import Card as CardModel
+from payment.models import DirectPayment as DirectPaymentModel
+from payment.models import PayByLink as PayByLinkModel
+from payment.models import PaymentInfo
+
 
 class PeymentInfoSeralizer(serializers.ModelSerializer):
     class Meta:

@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import PayByLink,DirectPayment,Card,PaymentInfo
+
+from .models import Card, DirectPayment, PayByLink, PaymentInfo
+
 admin.site.register(PayByLink)
 admin.site.register(DirectPayment)
 admin.site.register(Card)

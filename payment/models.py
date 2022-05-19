@@ -1,8 +1,9 @@
-import requests
 import json
+
+import requests
+from django.conf.global_settings import AUTH_USER_MODEL
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.conf.global_settings import AUTH_USER_MODEL
 
 currency_choices =(
     ("EUR","EUR"),
