@@ -35,7 +35,7 @@ class PayByLink(models.Model):
     )
     amount = models.IntegerField(validators=[MinValueValidator(10)])
     description = models.CharField(max_length=20)
-    bank = models.CharField(max_length=5)
+    bank = models.CharField(max_length=5,blank=True)
     Customer = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True)
 
     def save(self, *args, **kwargs):

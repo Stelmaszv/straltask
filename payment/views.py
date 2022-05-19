@@ -17,7 +17,7 @@ class APIPrototype(APIView):
     def action_after_list(self,serializer,request):
         pass
 
-    def on_query_set(self):
+    def on_query_set(self,user):
         pass
 
     def list(self,request):
@@ -38,7 +38,7 @@ class APIPrototype(APIView):
         if serializer.is_valid():
             request.data['Customer']=request.user
             serializer.save()
-            return Response(data=self.list(), status=status.HTTP_201_CREATED)
+            return Response(data=self.list(request), status=status.HTTP_201_CREATED)
         return self.api_get(request)
 
     def api_get(self, request, *args, **kwargs):
@@ -58,22 +58,22 @@ class PaymentInfoView(APIPrototype):
 class PaymentInfoByTypeView(APIPrototype):
 
     http_method_names = ['get']
-    SerializerClass = PeymentInfoTypeSeralizer
+    SerializerClass  = PeymentInfoTypeSeralizer
     queryset = PaymentInfo.objects
 
 class PayByLinkView(APIPrototype):
 
-    serializer_class = PayByLinkSeralizer
+    SerializerClass = PayByLinkSeralizer
     queryset = PayByLink.objects
 
 class DirectPaymentView(APIPrototype):
 
-    serializer_class = DirectPaymentSeralizer
+    SerializerClass = DirectPaymentSeralizer
     queryset = DirectPayment.objects
 
 class CardView(APIPrototype):
 
-    SerializerClass = CardSeralizer
+    SerializerClass  = CardSeralizer
     queryset = Card.objects
 
 class PaymentInfoId(PaymentInfoView):
