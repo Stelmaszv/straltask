@@ -3,7 +3,7 @@ from django.urls import resolve
 from django.urls import reverse
 from rest_framework import status
 from payment.views import PaymentInfoView, PayByLinkView, DirectPaymentView,CardView
-from payment.models import PayByLink,DirectPayment,Card
+from payment.models import PayByLink,DirectPayment,Card,PaymentInfo
 
 class AbstratTest(APITestCase):
     many=True
@@ -45,7 +45,7 @@ class PayByLink_test(AbstratTest):
         response = self.client.post(self.url_test, data_post)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(PayByLink.objects.count(), 1)
-        self.assertEqual(PaymentInfoView.objects.count(), 1)
+        self.assertEqual(PaymentInfo.objects.count(), 1)
 
 class DirectPayment_test(AbstratTest):
     url_test = reverse("direct-payment", kwargs={})
@@ -57,7 +57,7 @@ class DirectPayment_test(AbstratTest):
         self.view_match(DirectPaymentView)
 
     def test_add_dp_link(self):
-        data_post =  {
+        data_post = {
             "create_at": "2022-05-19T13:28:38.737557Z",
             "currency": "EUR",
             "amount": 13333333,
@@ -69,7 +69,7 @@ class DirectPayment_test(AbstratTest):
         response = self.client.post(self.url_test, data_post)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(DirectPayment.objects.count(), 1)
-        self.assertEqual(PaymentInfoView.objects.count(), 1)
+        self.assertEqual(PaymentInfo.objects.count(), 1)
 
 class Card_test(AbstratTest):
     url_test = reverse("card", kwargs={})
@@ -81,11 +81,11 @@ class Card_test(AbstratTest):
         self.view_match(CardView)
 
     def test_add_dp_link(self):
-        data_post =      {
+        data_post = {
             "create_at": "2022-05-19T11:10:26.666338Z",
             "currency": "EUR",
             "amount": 12,
-            "description": "kotek już wpłacił",
+            "description": "REF123457",
             "cartholder_name": "John",
             "cartholder_surname": "Doe",
             "cart_number": "1234567812345678"
@@ -95,5 +95,5 @@ class Card_test(AbstratTest):
         response = self.client.post(self.url_test, data_post)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(Card.objects.count(), 1)
-        self.assertEqual(PaymentInfoView.objects.count(), 1)
+        self.assertEqual(PaymentInfo.objects.count(), 1)
 
