@@ -1,3 +1,6 @@
+import json
+import os
+
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,6 +15,9 @@ class APIPrototype(APIView):
     queryset = ''
     order_by = ''
 
+    def action_after_list(self,serializer,request):
+        pass
+
     def on_query_set(self):
         pass
 
@@ -25,6 +31,7 @@ class APIPrototype(APIView):
                 reverse=self.reverse)
         else:
             list= serializer.data
+        self.action_after_list(serializer,request)
         return list
 
     def post(self, request, *args, **kwargs):
@@ -49,14 +56,6 @@ class PaymentInfoView(APIPrototype):
     reverse = True
     order_by = 'date'
 
-class PaymentInfoId(PaymentInfoView):
-
-    http_method_names = ['get']
-    SerializerClass = PeymentInfoSeralizer
-
-    def on_query_set(self,user):
-        self.queryset = PaymentInfo.objects.filter(Customer=user)
-
 class PaymentInfoByTypeView(APIPrototype):
 
     http_method_names = ['get']
@@ -77,5 +76,31 @@ class CardView(APIPrototype):
 
     SerializerClass = CardSeralizer
     queryset = Card.objects
+
+class PaymentInfoId(PaymentInfoView):
+    http_method_names = ['get']
+    SerializerClass = PeymentInfoSeralizer
+
+    def on_query_set(self, user):
+        self.queryset = PaymentInfo.objects.filter(Customer=user)
+
+class PaymentInfoSaveRaportId(PaymentInfoId):
+
+    def on_query_set(self,user):
+        self.queryset = PaymentInfo.objects.filter(Customer=user)
+
+    def action_after_list(self,serializer,request):
+        self.save_in_memory(serializer.data,request)
+
+    def save_in_memory(self,data,request):
+        json_str = json.dumps(data)
+        loaction='raports/'+str(request.user.id)
+        if os.path.isdir(loaction) is False:
+            os.mkdir(loaction)
+        if os.path.exists(loaction+'/raport.json'):
+            os.remove(loaction+'/raport.json')
+        a_file = open(loaction+'/raport.json', "w")
+        json.dump(json.loads(json_str), a_file)
+        a_file.close()
 
 

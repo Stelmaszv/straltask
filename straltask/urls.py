@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path
 
 from payment.views import PaymentInfoView, PaymentInfoByTypeView, PayByLinkView, DirectPaymentView, CardView, \
-    PaymentInfoId
+    PaymentInfoId, PaymentInfoSaveRaportId
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,5 +26,6 @@ urlpatterns = [
     path('pay-by-link', PayByLinkView.as_view(), name="pay-by-link"),
     path('direct-payment', DirectPaymentView.as_view(), name="direct-payment"),
     path('card', CardView.as_view(), name="card"),
-    path('customer-report/<int:customer_id>', PaymentInfoId.as_view(), name="card")
+    path('raport-endpoint/<int:customer_id>', PaymentInfoSaveRaportId.as_view(), name="raport-endpoint"),
+    path('customer-raport/<int:customer_id>', PaymentInfoId.as_view(), name="customer-raport")
 ]
